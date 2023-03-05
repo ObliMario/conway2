@@ -14,10 +14,13 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.util.Random;
+import java.awt.BasicStroke;
+import java.awt.Graphics2D;
 
 public class MatrizConColores {
     private Individuo[][] matriz;
-    private Color[][] colores;
+    private Color[][] coloresClase;
+    private Color[][] coloresTeam;
     private MatrizPanel panel;
     final int BLANCO = 0;
     final int MUERTO = 0;
@@ -25,15 +28,19 @@ public class MatrizConColores {
     final int ROJO = 1;
     final int AZUL = 2;
     final int nTeams = 3;
+    final int SHEEP = 1;
+    final int WOLF = 2;
 
     public MatrizConColores(Individuo[][] matriz) {
         this.matriz = matriz;
-        this.colores = new Color[matriz.length][matriz[0].length];
+        this.coloresClase = new Color[matriz.length][matriz[0].length];
+        this.coloresTeam = new Color[matriz.length][matriz[0].length];
         // Inicializar la matriz de colores con los valores de la matriz, si el valor es
         // 0, mostrar blanco, si es 1, mostrar rojo, si es 2, mostrar azul, en otro
         // caso, mostrar negro
 
-        colores = getColores(matriz);
+        coloresClase = getColoresClase(matriz);
+        coloresTeam = getColoresTeam(matriz);
 
         // Crear una ventana gráfica para mostrar la matriz
         JFrame frame = new JFrame("Conway's Game of Life");
@@ -46,20 +53,52 @@ public class MatrizConColores {
 
     }
 
-    private Color[][] getColores(Individuo[][] matriz) {
-        colores = new Color[matriz.length][matriz[0].length];
+    private Color[][] getColoresClase(Individuo[][] matriz) {
+        coloresClase = new Color[matriz.length][matriz[0].length];
         for (int i = 0; i < matriz.length; i++) {
             for (int j = 0; j < matriz[0].length; j++) {
-                colores[i][j] = getColor(matriz[i][j]);
+                coloresClase[i][j] = getColorClase(matriz[i][j]);
             }
         }
-        return colores;
+        return coloresClase;
+    }
+    private Color[][] getColoresTeam(Individuo[][] matriz) {
+        coloresTeam = new Color[matriz.length][matriz[0].length];
+        for (int i = 0; i < matriz.length; i++) {
+            for (int j = 0; j < matriz[0].length; j++) {
+                coloresTeam[i][j] = getColorTeam(matriz[i][j]);
+            }
+        }
+        return coloresTeam;
     }
 
-    private Color getColor(Individuo i) {
+    private Color getColorClase(Individuo i) {
         Color color;
         if(i.estado == MUERTO){
             color = Color.WHITE;
+        } else if(i.estado == INVALIDO){
+            color = Color.YELLOW;
+        } else {
+            switch (i.clase) {
+                case SHEEP:
+                    color = Color.GREEN;
+                    break;
+                case WOLF:
+                    color = Color.BLACK;
+                    break;
+                default:
+                    System.out.println("Yellow, team: " + i.team);
+
+                    color = Color.YELLOW;
+                    break;
+            }
+        }
+        return color;
+    }
+    private Color getColorTeam(Individuo i) {
+        Color color;
+        if(i.estado == MUERTO){
+            color = Color.GRAY;
         } else if(i.estado == INVALIDO){
             color = Color.BLACK;
         } else {
@@ -89,8 +128,9 @@ public class MatrizConColores {
                 newMatriz[i][j] = newIndividual(matriz, i, j);
             }
         }
-        // Actualizar la matriz de colores con los valores de la nueva matriz
-        colores = getColores(newMatriz);
+        // Actualizar la matriz de coloresClase con los valores de la nueva matriz
+        coloresClase = getColoresClase(newMatriz);
+        coloresTeam = getColoresTeam(newMatriz);
         // Repintar la matriz
         panel.repaint();
         matriz = newMatriz;
@@ -155,15 +195,33 @@ public class MatrizConColores {
         @Override
         public void paintComponent(Graphics g) {
             super.paintComponent(g);
+            Graphics2D g2 = (Graphics2D) g;
+
 
             for (int i = 0; i < matriz.length; i++) {
                 for (int j = 0; j < matriz[0].length; j++) {
-                    //las celdas deben tener el color correspondiente
-                    g.setColor(colores[i][j]);
+                    //las celdas deben tener el color de la clase
+                    g.setColor(coloresClase[i][j]);
                     g.fillRect(j * CELDA_SIZE, i * CELDA_SIZE, CELDA_SIZE, CELDA_SIZE);
-                    //las celdas deben tener bordes blancos
-                    g.setColor(Color.WHITE);
+                    //las celdas deben tener bordes correspondientes al equipo con un ancho de 2px
+                    g.setColor(coloresTeam[i][j]);
+                    if(coloresTeam[i][j] != Color.GRAY){
+                        g2.setStroke(new BasicStroke(3)); //grosor de 2 píxel
+                    } else {
+                        g2.setStroke(new BasicStroke(1)); //grosor de 1 píxel
+                    }
                     g.drawRect(j * CELDA_SIZE, i * CELDA_SIZE, CELDA_SIZE, CELDA_SIZE);
+                    
+                    g2.setStroke(new BasicStroke(1)); //grosor de 1 píxel
+                    if(coloresTeam[i][j] != Color.GRAY){
+                        g.setColor(Color.WHITE);
+                    } else {
+                        g.setColor(Color.GRAY);
+                    }
+
+                    g.drawRect(j * CELDA_SIZE, i * CELDA_SIZE, CELDA_SIZE, CELDA_SIZE);
+
+    
                 }
             }
         }
