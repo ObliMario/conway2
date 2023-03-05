@@ -4,6 +4,7 @@
 
 package com.mycompany.conway2;
 
+import java.io.Console;
 import java.util.Random;
 
 /**
@@ -14,17 +15,12 @@ public class Conway2 {
 
     public static void main(String[] args) {
         System.out.println("Hello Conway!");
-        int[][] matriz = {
-                {1, 2, 0},
-                {2, 0, 1},
-                {0, 1, 2}
-        };
 
-        matriz = RandomMatriz(30, 60);
+        Individuo[][] matriz = RandomMatriz(30, 30);
 
         MatrizConColores matrizConColores = new MatrizConColores(matriz);
 
-        int maxIterations = 60;
+        int maxIterations = 100;
         int iterations = 0;
 
         while (iterations < maxIterations) {
@@ -36,14 +32,15 @@ public class Conway2 {
             }
             iterations++;
         }
+        System.out.println("FIN");
     }
 
-    private static int[][] RandomMatriz(int filas, int columnas) {
-        int[][] matriz = new int[filas][columnas];
+    private static Individuo[][] RandomMatriz(int filas, int columnas) {
+        Individuo[][] matriz = new Individuo[filas][columnas];
         Random random = new Random();
         for (int i = 0; i < filas; i++) {
             for (int j = 0; j < columnas; j++) {
-                matriz[i][j] = random.nextInt(3);
+                matriz[i][j] = new Individuo(random.nextInt(2), random.nextInt(2)+1, 1);
             }
         }
         return matriz;
