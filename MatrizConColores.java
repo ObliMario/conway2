@@ -235,4 +235,26 @@ public class MatrizConColores {
         return puntaje;
     }
 
+    public float[] getPuntajePorcentaje(){
+        int[] puntaje = getPuntaje();
+        float[] puntajePorcentaje = new float[nTeams+1];
+        for (int i = 0; i < puntaje.length; i++) {
+            puntajePorcentaje[i] = (float) puntaje[i] / (matriz.length * matriz[0].length);
+            // Redondear a 2 decimales sobre el 100 %
+            puntajePorcentaje[i] = Math.round(puntajePorcentaje[i] * 10000) / 100f;    
+        }
+        return puntajePorcentaje;
+    }
+
+    public void emptyMatriz() {
+        for (int i = 0; i < matriz.length; i++) {
+            for (int j = 0; j < matriz[0].length; j++) {
+                matriz[i][j] = new IndividuoMuerto();
+            }
+        }
+        coloresClase = getColoresClase(matriz);
+        coloresTeam = getColoresTeam(matriz);
+        panelMatriz.repaint();
+    }
+
 }

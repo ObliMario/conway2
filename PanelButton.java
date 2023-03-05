@@ -20,6 +20,8 @@ public class PanelButton extends JPanel {
     private JButton btnTeam;
     private JButton btnClass;
     private JButton btnNext;
+    private JButton btnScore;
+    private JButton btnEmpty;
     private JLabel labelInfo;
 
     private MatrizConColores matrizConColores;
@@ -32,17 +34,26 @@ public class PanelButton extends JPanel {
         btnTeam = new JButton("Team: 1");
         btnClass = new JButton("Class: 1");
         btnNext = new JButton("Next");
+        btnScore = new JButton("Score");
+        btnEmpty = new JButton("Empty");
 
         buttonPanel = new JPanel();
-        buttonPanel.setLayout(new GridLayout(3, 2));
+        buttonPanel.setLayout(new GridLayout(2, 6));
 
         buttonPanel.add(btnPlay);
         buttonPanel.add(btnPause);
         buttonPanel.add(btnTeam);
         buttonPanel.add(btnClass);
         buttonPanel.add(btnNext);
+        buttonPanel.add(btnScore);
+        buttonPanel.add(btnEmpty);
+
 
         labelInfo = new JLabel("Info: ");
+/* 
+        labelInfo.setPreferredSize(new Dimension(Short.MAX_VALUE, labelInfo.getPreferredSize().height));
+        labelInfo.setHorizontalAlignment(SwingConstants.CENTER);
+         */
         buttonPanel.add(labelInfo);
 
         // Agregar el panell de botones y el contenido principal al panell
@@ -80,6 +91,14 @@ public class PanelButton extends JPanel {
             // Modificar la variable selectedTeam aquí
             matrizConColores.play = false;
         });
-
+        btnScore.addActionListener((ActionEvent e) -> {
+            // Modificar la variable selectedTeam aquí
+            float[] score = matrizConColores.getPuntajePorcentaje();
+            labelInfo.setText("Info: " + "Team ROJO: " + score[1] + "% Team AZUL: " + score[2] + "%");
+        });
+        btnEmpty.addActionListener((ActionEvent e) -> {
+            // Modificar la variable selectedTeam aquí
+            matrizConColores.emptyMatriz();
+        });
     }
 }
