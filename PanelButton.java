@@ -12,7 +12,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class ButtonPanel extends JPanel {
+public class PanelButton extends JPanel {
 
     private JPanel buttonPanel;
     private JButton btnPlay;
@@ -24,7 +24,7 @@ public class ButtonPanel extends JPanel {
 
     private MatrizConColores matrizConColores;
 
-    public ButtonPanel(MatrizConColores matrizConColores) {
+    public PanelButton(MatrizConColores matrizConColores) {
         this.matrizConColores = matrizConColores;
         // Crear botones y agregarlos al panell de botones
         btnPlay = new JButton("Play");

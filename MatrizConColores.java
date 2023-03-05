@@ -18,8 +18,8 @@ public class MatrizConColores {
     public Individuo[][] matriz;
     public Color[][] coloresClase;
     public Color[][] coloresTeam;
-    private MatrizPanel panelMatriz;
-    private ButtonPanel panelButton;
+    private PanelMatriz panelMatriz;
+    private PanelButton panelButton;
     final int BLANCO = 0;
     final int MUERTO = 0;
     final int INVALIDO = 2;
@@ -51,10 +51,10 @@ public class MatrizConColores {
         ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // Crear el panel de la matriz
-        panelMatriz = new MatrizPanel(this);
+        panelMatriz = new PanelMatriz(this);
 
         // Crear el panel de botones
-        panelButton = new ButtonPanel(this);
+        panelButton = new PanelButton(this);
 
         // Crear el split pane y agregar los paneles a cada lado
         JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, panelMatriz, panelButton);
@@ -221,6 +221,18 @@ public class MatrizConColores {
         coloresClase = getColoresClase(matriz);
         coloresTeam = getColoresTeam(matriz);
         panelMatriz.repaint();
+    }
+
+    public int[] getPuntaje() {
+        int[] puntaje = new int[nTeams+1];
+        for (int i = 0; i < matriz.length; i++) {
+            for (int j = 0; j < matriz[0].length; j++) {
+                if (matriz[i][j].estado != MUERTO) {
+                    puntaje[matriz[i][j].team]++;
+                }
+            }
+        }
+        return puntaje;
     }
 
 }

@@ -11,12 +11,12 @@ import java.awt.*;
  *
  * @author mario
  */
-public class MatrizPanel extends JPanel {
+public class PanelMatriz extends JPanel {
 
     private static final int CELDA_SIZE = 20;
     private MatrizConColores matrizConColores;
 
-    public MatrizPanel(MatrizConColores matrizConColores) {
+    public PanelMatriz(MatrizConColores matrizConColores) {
         this.matrizConColores = matrizConColores;
         setPreferredSize(new Dimension(matrizConColores.matriz[0].length * CELDA_SIZE,
                 matrizConColores.matriz.length * CELDA_SIZE));
