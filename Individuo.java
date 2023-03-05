@@ -13,16 +13,18 @@ import java.util.Random;
 public class Individuo {
 
     protected int estado;
-    protected int clase;
     protected int team;
+    protected int clase;
+    final int SHEEP = 1;
+    final int WOLF = 2;
 
     public Individuo(int estado, int team, int clase) {
         if (estado == 0) {
             // Si el estado es 0, el individuo está muerto y será de la clase
             // IndividuoMuerto
             this.estado = 0;
-            this.clase = 0;
             this.team = 0;
+            this.clase = 0;
 
         } else if (estado == 1) {
             this.estado = 1;
@@ -34,26 +36,81 @@ public class Individuo {
             this.estado = 2;
             this.team = 0;
             this.clase = 0;
-            System.out.println("Estado invalido");
+            //System.out.println("Estado invalido");
         }
     }
 
-    public int survivePoints(int[] vecinos) {
-        // Recibo un array de enteros con la cantidad de vecinos de cada team según su
-        // posición en el array
-        // El primer elemento es la cantidad de vecinos del team 0, el segundo elemento
-        // es la cantidad de vecinos del team 1, etc.
+    public Individuo createIndividuo(int selectedClass, int selectedTeam) {
+        Individuo individuo;
+        if (selectedTeam == 0) {
+            return new IndividuoMuerto();
+        }
+        switch (selectedClass) {
+            case SHEEP:
+                individuo = new IndividuoSheep(1, selectedTeam);
+                break;
+            case WOLF:
+                individuo = new IndividuoWolf(1, selectedTeam);
+                break;
+            default:
+                individuo = new IndividuoInvalido();
+                break;
+        }
+        return individuo;
+    }
 
+    public int survivePoints(int[] vecinosOrdered, Individuo[] vecinos) {
         int survivePoints = 0;
 
-        int[] vecinosTeam = getVecinosTeam(vecinos);
-        if (vecinosTeam[1] + vecinosTeam[2] < 2 || vecinosTeam[1] + vecinosTeam[2] > 4) {
+        int[] vecinosTeam = getVecinosTeam(vecinosOrdered);
+        if (vecinosTeam[1] + vecinosTeam[2] < 2 || vecinosTeam[1] + vecinosTeam[2] > 3) {
             survivePoints = 0;
         } else if (vecinosTeam[1] + vecinosTeam[2] == 2 || vecinosTeam[1] + vecinosTeam[2] == 3) {
             survivePoints = 100;
         }
 
         return survivePoints;
+    }
+
+    /**
+     * Devuelve un array de enteros que muestra la cantidad de Individuos [none,
+     * myTeamSameClass, enemyTeamSameClass, myTeamDifferentClass,
+     * enemyTeamDifferentClass]
+     * 
+     * @param thisIndividuo
+     * @param allIndividuos
+     * @return
+     */
+    public int[] getSameClass(Individuo thisIndividuo, Individuo[] allIndividuos, boolean thisInsideAllIndividuos) {
+
+        int none = 0;
+        int myTeamSameClass = 0;
+        int enemyTeamSameClass = 0;
+        int myTeamDifferentClass = 0;
+        int enemyTeamDifferentClass = 0;
+
+        for (int i = 0; i < allIndividuos.length; i++) {
+            if (allIndividuos[i] != null) {
+                if (allIndividuos[i].team == thisIndividuo.team && allIndividuos[i].clase == thisIndividuo.clase) {
+                    myTeamSameClass += 1;
+                } else if (allIndividuos[i].team != thisIndividuo.team
+                        && allIndividuos[i].clase == thisIndividuo.clase) {
+                    enemyTeamSameClass += 1;
+                } else if (allIndividuos[i].team == thisIndividuo.team
+                        && allIndividuos[i].clase != thisIndividuo.clase) {
+                    myTeamDifferentClass += 1;
+                } else if (allIndividuos[i].team != thisIndividuo.team
+                        && allIndividuos[i].clase != thisIndividuo.clase) {
+                    enemyTeamDifferentClass += 1;
+                }
+            } else {
+                none += 1;
+            }
+        }
+        if (thisInsideAllIndividuos)
+            myTeamSameClass -= 1;
+
+        return new int[] { none, myTeamSameClass, enemyTeamSameClass, myTeamDifferentClass, enemyTeamDifferentClass };
     }
 
     /**
@@ -84,7 +141,7 @@ public class Individuo {
         // Reviso si hay alguien que tenga más de 2 parejas, en ese caso, saco todos
         // estos individuos de entre los candidatos
 
-        for (int i = 0; i < nParejas.length-1; i++) {
+        for (int i = 0; i < nParejas.length - 1; i++) {
             if (nParejas[i] > 2) {
                 for (int j = i; j < nParejas.length; j++) {
                     if (vecinos[i] != null && vecinos[j] != null && vecinos[i].clase == vecinos[j].clase
@@ -149,11 +206,17 @@ public class Individuo {
         return vecinosTeam;
     }
 
-    public int probNacimiento(int i) {
-        return 0;
+    public int probNacimiento(int parejas) {
+        int probNacimiento = 0;
+        if (parejas == 2) {
+            probNacimiento = 30;
+        } else {
+            probNacimiento = 0;
+        }
+        return probNacimiento;
     }
 
     public Individuo nacer() {
-        return new IndividuoMuerto();
+        return new Individuo(1,this.team,this.clase);
     }
 }

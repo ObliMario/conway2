@@ -18,9 +18,4 @@ public class IndividuoInvalido extends Individuo {
 
         }
     
-        @Override
-        public int survivePoints(int[] vecinos) {
-            return 0;
-        }
-    
 }

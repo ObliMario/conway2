@@ -15,10 +15,10 @@ public class IndividuoSheep extends Individuo {
     }
 
     @Override
-    public int survivePoints(int[] vecinos) {
+    public int survivePoints(int[] vecinosOrdered, Individuo[] vecinos) {
         int survivePoints = 0;
 
-        int[] vecinosTeam = getVecinosTeam(vecinos);
+        int[] vecinosTeam = getVecinosTeam(vecinosOrdered);
         if (vecinosTeam[1] + vecinosTeam[2] < 2 || vecinosTeam[1] + vecinosTeam[2] > 3) {
             survivePoints = 0;
         } else if (vecinosTeam[1] + vecinosTeam[2] == 2 || vecinosTeam[1] + vecinosTeam[2] == 3) {
@@ -32,7 +32,7 @@ public class IndividuoSheep extends Individuo {
     public int probNacimiento(int parejas) {
         int probNacimiento = 0;
         if (parejas == 2) {
-            probNacimiento = 100;
+            probNacimiento = 30;
         } else {
             probNacimiento = 0;
         }

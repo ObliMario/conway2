@@ -13,10 +13,5 @@ public class IndividuoMuerto extends Individuo {
     public IndividuoMuerto() {
         super(0, 0, 0);
     }
-
-    @Override
-    public int survivePoints(int[] vecinos) {
-        return 0;
-    }
     
 }
