@@ -124,7 +124,6 @@ public class MatrizConColores {
         Individuo[][] newMatriz = new Individuo[matriz.length][matriz[0].length];
         for (int i = 0; i < matriz.length; i++) {
             for (int j = 0; j < matriz[0].length; j++) {
-                // newMatriz[i][j] = random.nextInt(3); //random
                 newMatriz[i][j] = newIndividual(matriz, i, j);
             }
         }
@@ -139,24 +138,29 @@ public class MatrizConColores {
     private Individuo newIndividual(Individuo[][] matriz, int i, int j) {
         Individuo newIndividual;
         Individuo thisIndividuo = matriz[i][j];
-        Individuo[] neighbors = getNeighbors(matriz, i, j);
-        int[] orderedNeighbors = getOrderedNeighbors(thisIndividuo, neighbors);
+        Individuo[] vecinos = getNeighbors(matriz, i, j);
+        int[] orderedNeighbors = getOrderedNeighbors(thisIndividuo, vecinos);
         
-        if (thisIndividuo.estado == BLANCO) {
-            //reglas para decidir si nace alguno alrededor
-            newIndividual = thisIndividuo.NacimientoPoints(orderedNeighbors);
+        if (thisIndividuo.estado == MUERTO) {
+            //reglas para decidir si y quien nace 
+            newIndividual = thisIndividuo.Nacimiento(vecinos);
         } else {
             if(thisIndividuo.survivePoints(orderedNeighbors) == 0){
                 newIndividual = new IndividuoMuerto();
             } else {
-                newIndividual = new Individuo(1, thisIndividuo.team, thisIndividuo.clase);
+                newIndividual = thisIndividuo;
             }
         }
         return newIndividual;
     }
 
     
-    /* Devuelve un array de Individuos que indica si los vecinos son del equipo [0,1,2,..] */
+    /**
+     * Devuelve un array de Individuos que indica si los vecinos son del equipo [0,1,2,..]
+     * @param thisIndividuo
+     * @param neighbors
+     * @return Integer array with the number of neighbors of each team
+     */
     private int[] getOrderedNeighbors(Individuo thisIndividuo, Individuo[] neighbors) {
         int[] orderedNeighbors = new int[nTeams];
         for (int i = 0; i < neighbors.length; i++) {
