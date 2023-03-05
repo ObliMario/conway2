@@ -27,12 +27,11 @@ import javax.swing.JLabel;
 import javax.swing.JSplitPane;
 
 public class MatrizConColores {
-    private Individuo[][] matriz;
-    private Color[][] coloresClase;
-    private Color[][] coloresTeam;
+    public Individuo[][] matriz;
+    public Color[][] coloresClase;
+    public Color[][] coloresTeam;
     private MatrizPanel panelMatriz;
     private ButtonPanel panelButton;
-    private static final int CELDA_SIZE = 20;
     final int BLANCO = 0;
     final int MUERTO = 0;
     final int INVALIDO = 2;
@@ -64,7 +63,7 @@ public class MatrizConColores {
         ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // Crear el panel de la matriz
-        panelMatriz = new MatrizPanel();
+        panelMatriz = new MatrizPanel(this);
 
         // Crear el panel de botones
         panelButton = new ButtonPanel();
@@ -226,7 +225,7 @@ public class MatrizConColores {
         return neighbors;
     }
 
-    private void selectCell(int fila, int columna, int selectedTeam, int selectedClass) {
+    public void selectCell(int fila, int columna) {
 
         matriz[fila][columna] = new Individuo(1, selectedTeam, selectedClass);
         matriz[fila][columna] = matriz[fila][columna].createIndividuo(selectedClass, selectedTeam);
@@ -234,78 +233,6 @@ public class MatrizConColores {
         coloresClase = getColoresClase(matriz);
         coloresTeam = getColoresTeam(matriz);
         panelMatriz.repaint();
-    }
-
-    private class MatrizPanel extends JPanel implements MouseListener {
-
-        public MatrizPanel() {
-            setPreferredSize(new Dimension(matriz[0].length * CELDA_SIZE, matriz.length * CELDA_SIZE));
-            addMouseListener(this);
-        }
-
-        @Override
-        public void paintComponent(Graphics g) {
-            super.paintComponent(g);
-            Graphics2D g2 = (Graphics2D) g;
-
-            for (int i = 0; i < matriz.length; i++) {
-                for (int j = 0; j < matriz[0].length; j++) {
-                    // las celdas deben tener el color de la clase
-                    g.setColor(coloresClase[i][j]);
-                    g.fillRect(j * CELDA_SIZE, i * CELDA_SIZE, CELDA_SIZE, CELDA_SIZE);
-                    // las celdas deben tener bordes correspondientes al equipo con un ancho de 2px
-                    g.setColor(coloresTeam[i][j]);
-                    if (coloresTeam[i][j] != Color.GRAY) {
-                        g2.setStroke(new BasicStroke(3)); // grosor de 2 píxel
-                    } else {
-                        g2.setStroke(new BasicStroke(1)); // grosor de 1 píxel
-                    }
-                    g.drawRect(j * CELDA_SIZE, i * CELDA_SIZE, CELDA_SIZE, CELDA_SIZE);
-
-                    g2.setStroke(new BasicStroke(1)); // grosor de 1 píxel
-                    if (coloresTeam[i][j] != Color.GRAY) {
-                        g.setColor(Color.WHITE);
-                    } else {
-                        g.setColor(Color.GRAY);
-                    }
-
-                    g.drawRect(j * CELDA_SIZE, i * CELDA_SIZE, CELDA_SIZE, CELDA_SIZE);
-
-                }
-            }
-        }
-
-        // Implementar los métodos de la interfaz MouseListener aquí
-        @Override
-        public void mouseClicked(MouseEvent e) {
-            // Obtener la posición del clic
-            int fila = e.getY() / CELDA_SIZE;
-            int columna = e.getX() / CELDA_SIZE;
-            System.out.println("Click en la fila " + fila + " y columna " + columna);
-
-            selectCell(fila, columna, selectedTeam, selectedClass);
-
-        }
-
-        @Override
-        public void mousePressed(MouseEvent e) {
-            // No es necesario hacer nada aquí
-        }
-
-        @Override
-        public void mouseReleased(MouseEvent e) {
-            // No es necesario hacer nada aquí
-        }
-
-        @Override
-        public void mouseEntered(MouseEvent e) {
-            // No es necesario hacer nada aquí
-        }
-
-        @Override
-        public void mouseExited(MouseEvent e) {
-            // No es necesario hacer nada aquí
-        }
     }
 
     public class ButtonPanel extends JPanel {
