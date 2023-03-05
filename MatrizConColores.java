@@ -9,21 +9,9 @@ package com.mycompany.conway2;
  * @author mario
  */
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
 import java.util.Random;
-import java.awt.BasicStroke;
 import java.awt.BorderLayout;
-import java.awt.Graphics2D;
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JSplitPane;
 
 public class MatrizConColores {
@@ -40,12 +28,12 @@ public class MatrizConColores {
     final int nTeams = 3;
     final int SHEEP = 1;
     final int WOLF = 2;
-    private int selectedTeam = 1;
-    private int selectedClass = 1;
+    public int selectedTeam = 1;
+    public int selectedClass = 1;
     public boolean play = false;
     public boolean next = false;
-    private int totalTeams = 2;
-    private int totalClasses = 2;
+    public int totalTeams = 2;
+    public int totalClasses = 2;
 
     public MatrizConColores(Individuo[][] matriz) {
         this.matriz = matriz;
@@ -66,7 +54,7 @@ public class MatrizConColores {
         panelMatriz = new MatrizPanel(this);
 
         // Crear el panel de botones
-        panelButton = new ButtonPanel();
+        panelButton = new ButtonPanel(this);
 
         // Crear el split pane y agregar los paneles a cada lado
         JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, panelMatriz, panelButton);
@@ -233,75 +221,6 @@ public class MatrizConColores {
         coloresClase = getColoresClase(matriz);
         coloresTeam = getColoresTeam(matriz);
         panelMatriz.repaint();
-    }
-
-    public class ButtonPanel extends JPanel {
-
-        private JPanel buttonPanel;
-        private JButton btnPlay;
-        private JButton btnPause;
-        private JButton btnTeam;
-        private JButton btnClass;
-        private JButton btnNext;
-        private JLabel labelInfo;
-
-        public ButtonPanel() {
-            // Crear botones y agregarlos al panell de botones
-            btnPlay = new JButton("Play");
-            btnPause = new JButton("Pause");
-            btnTeam = new JButton("Team: 1");
-            btnClass = new JButton("Class: 1");
-            btnNext = new JButton("Next");
-
-            buttonPanel = new JPanel();
-            buttonPanel.setLayout(new GridLayout(3, 2));
-
-            buttonPanel.add(btnPlay);
-            buttonPanel.add(btnPause);
-            buttonPanel.add(btnTeam);
-            buttonPanel.add(btnClass);
-            buttonPanel.add(btnNext);
-
-            labelInfo = new JLabel("Info: ");
-            buttonPanel.add(labelInfo);
-
-            // Agregar el panell de botones y el contenido principal al panell
-            setLayout(new BorderLayout());
-            add(buttonPanel, BorderLayout.CENTER);
-
-            btnTeam.addActionListener((ActionEvent e) -> {
-                // Modificar la variable selectedTeam para que tome valores de 1 en adelante con
-                // módulo 2
-
-                selectedTeam++;
-                if (selectedTeam > totalTeams) {
-                    selectedTeam = 0;
-                }
-                btnTeam.setText("Team: " + selectedTeam);
-            });
-            btnClass.addActionListener((ActionEvent e) -> {
-                // Modificar la variable selectedTeam aquí
-
-                selectedClass++;
-                if (selectedClass > totalClasses) {
-                    selectedClass = 1;
-                }
-                btnClass.setText("Class: " + selectedClass);
-            });
-            btnNext.addActionListener((ActionEvent e) -> {
-                // Modificar la variable selectedTeam aquí
-                nextGeneration();
-            });
-            btnPlay.addActionListener((ActionEvent e) -> {
-                // Modificar la variable selectedTeam aquí
-                play = true;
-            });
-            btnPause.addActionListener((ActionEvent e) -> {
-                // Modificar la variable selectedTeam aquí
-                play = false;
-            });
-
-        }
     }
 
 }
