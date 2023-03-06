@@ -21,12 +21,9 @@ public class MatrizMouseListener implements MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        System.out.println("Click!!");
         // Obtener la posición del clic
         int fila = e.getY() / CELDA_SIZE;
         int columna = e.getX() / CELDA_SIZE;
-        System.out.println("Click en la fila " + fila + " y columna " + columna);
-
         matrizConColores.selectCell(fila, columna);
 
     }

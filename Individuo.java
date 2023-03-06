@@ -30,13 +30,10 @@ public class Individuo {
             this.estado = 1;
             this.team = team;
             this.clase = clase;
-            // System.out.println("estado: " + this.estado + " team: " + this.team + "
-            // clase: " + this.clase);
         } else {
             this.estado = 2;
             this.team = 0;
             this.clase = 0;
-            //System.out.println("Estado invalido");
         }
     }
 

@@ -36,7 +36,6 @@ public class Conway2 {
                         e.printStackTrace();
                     }
                     iterations++;
-                    if(iterations % 10 == 0) System.out.println("iteraciones: \n" + iterations + " de " + maxIterations + "");
                 }
                 matrizConColores.play = false;
             } else {

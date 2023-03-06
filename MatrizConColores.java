@@ -103,8 +103,7 @@ public class MatrizConColores {
                     color = Color.BLACK;
                     break;
                 default:
-                    System.out.println("Yellow, team: " + i.team);
-
+                    System.out.println("Error: Yellow, clase: " + i.clase);
                     color = Color.YELLOW;
                     break;
             }
@@ -127,7 +126,7 @@ public class MatrizConColores {
                     color = Color.BLUE;
                     break;
                 default:
-                    System.out.println("Yellow, team: " + i.team);
+                    System.out.println("Error: Yellow, team: " + i.team);
 
                     color = Color.YELLOW;
                     break;
